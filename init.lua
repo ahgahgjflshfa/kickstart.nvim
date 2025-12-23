@@ -203,6 +203,12 @@ vim.keymap.set('n', '<leader>_', '<C-W>s', { desc = 'Split Window Below', remap 
 vim.keymap.set('n', '<leader>|', '<C-W>v', { desc = 'Split Window Right', remap = true })
 vim.keymap.set('n', '<leader>wd', '<C-W>c', { desc = 'Delete Window', remap = true })
 
+-- Resize windows with Ctrl + arrow keys
+vim.keymap.set('n', '<C-Up>', ':resize +2<CR>', { desc = 'Increase window height', silent = true })
+vim.keymap.set('n', '<C-Down>', ':resize -2<CR>', { desc = 'Decrease window height', silent = true })
+vim.keymap.set('n', '<C-Left>', ':vertical resize -2<CR>', { desc = 'Decrease window width', silent = true })
+vim.keymap.set('n', '<C-Right>', ':vertical resize +2<CR>', { desc = 'Increase window width', silent = true })
+
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
 --
@@ -314,7 +320,7 @@ require('lazy').setup({
   -- Then, because we use the `opts` key (recommended), the configuration runs
   -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
 
-  {                     -- Useful plugin to show you pending keybinds.
+  { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
@@ -361,16 +367,21 @@ require('lazy').setup({
 
       -- Document existing key chains
       spec = {
-        { '<leader>b',  group = '[b]uffer' },
-        { '<leader>c',  group = '[c]ode' },
-        { '<leader>f',  group = '[f]ind' },
-        { '<leader>g',  group = '[g]it & GitHub',  mode = { 'n', 'v' } },
-        { '<leader>gh', group = '[h]unk',          mode = { 'n', 'v' } },
-        { '<leader>s',  group = '[s]earch' },
-        { '<leader>t',  group = '[t]oggle' },
-        { '<leader>u',  group = '[u]ser Interface' },
-        { '<leader>w',  group = '[w]indow' },
-        { '<leader>x',  group = 'Trouble' },
+        {
+          { '<leader>_', desc = 'Split Window Below', icon = { icon = '󰖯', color = 'purple' } },
+          { '<leader>|', desc = 'Split Window Right', icon = { icon = '󰖯', color = 'purple' } },
+          { '<leader>b', group = '[b]uffer', icon = { icon = '󰓩', color = 'purple' } },
+          { '<leader>c', group = '[c]ode', icon = { icon = '󰅩', color = 'purple' } },
+          { '<leader>d', group = '[d]atabase', icon = { icon = '󰆼', color = 'purple' } },
+          { '<leader>f', group = '[f]ind', icon = { icon = '󰱼', color = 'purple' } },
+          { '<leader>g', group = '[g]it', icon = { icon = '', color = 'purple' }, mode = { 'n', 'v' } },
+          { '<leader>gh', group = '[h]unk', icon = { icon = '󰊢', color = 'purple' }, mode = { 'n', 'v' } },
+          { '<leader>s', group = '[s]earch', icon = { icon = '󰍉', color = 'purple' } },
+          { '<leader>t', group = '[t]oggle', icon = { icon = '󰔡', color = 'purple' } },
+          { '<leader>u', group = '[u]ser Interface', icon = { icon = '󰙵', color = 'purple' } },
+          { '<leader>w', group = '[w]indow', icon = { icon = '󰖯', color = 'purple' } },
+          { '<leader>x', group = 'Trouble', icon = { icon = '󰒡', color = 'purple' } },
+        },
       },
     },
   },
@@ -679,6 +690,9 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        html = { 'prettier' },
+        css = { 'prettier' },
+        javascript = { 'prettier' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
@@ -830,7 +844,7 @@ require('lazy').setup({
   },
 
   -- Highlight todo, notes, etc in comments
-  { 'folke/todo-comments.nvim',      event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
+  { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
@@ -883,14 +897,14 @@ require('lazy').setup({
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     config = function()
-      local ts = require('nvim-treesitter')
+      local ts = require 'nvim-treesitter'
 
       -- State tracking for async parser loading
       local parsers_loaded = {}
       local parsers_pending = {}
       local parsers_failed = {}
 
-      local ns = vim.api.nvim_create_namespace('treesitter.async')
+      local ns = vim.api.nvim_create_namespace 'treesitter.async'
 
       -- Helper to start highlighting and indentation
       local function start(buf, lang)
@@ -977,7 +991,7 @@ require('lazy').setup({
           end
 
           -- Auto-install missing parsers (async, no-op if already installed)
-          ts.install({ lang })
+          ts.install { lang }
         end,
       })
     end,
@@ -986,7 +1000,7 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter-context',
     config = function()
       require('treesitter-context').setup {
-        max_lines = 3,   -- 最多顯示幾行 context
+        max_lines = 3, -- 最多顯示幾行 context
         multiline_threshold = 5,
         mode = 'cursor', -- 依據游標位置決定顯示的節點
       }
@@ -1016,6 +1030,7 @@ require('lazy').setup({
   { import = 'custom.plugins.lang' },
   { import = 'custom.plugins.lsp' },
   { import = 'custom.plugins.ui' },
+  { import = 'custom.plugins.utils' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
