@@ -486,9 +486,9 @@ require('lazy').setup({
           end
 
           -- disable all LSP semantic highlighting
-          if client.server_capabilities.semanticTokensProvider then
-            client.server_capabilities.semanticTokensProvider = nil
-          end
+          -- if client.server_capabilities.semanticTokensProvider then
+          --   client.server_capabilities.semanticTokensProvider = nil
+          -- end
         end,
       })
 
