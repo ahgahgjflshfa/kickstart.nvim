@@ -20,6 +20,7 @@ return {
   },
   {
     'MeanderingProgrammer/render-markdown.nvim',
+    ft = { 'markdown' },
     opts = {
       code = {
         sign = false,
@@ -34,7 +35,6 @@ return {
         enabled = false,
       },
     },
-    ft = { 'markdown' },
     config = function(_, opts)
       require('render-markdown').setup(opts)
       Snacks.toggle({
