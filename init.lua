@@ -422,6 +422,10 @@ require('lazy').setup({
 
           map('<leader>cR', vim.lsp.buf.rename, '[R]ename File')
 
+          -- Manually bind <C-b> & <C-f> for scrolling in hover window
+          -- map('<C-f>', vim.lsp.buf.scroll, 'Scroll Doc Down')
+          -- map('<C-b>', vim.lsp.buf.completion, 'Scroll Doc Down')
+
           -- Fuzzy find all the symbols in your current document.
           --  Symbols are things like variables, functions, types, etc.
           -- map('gO', require('telescope.builtin').lsp_document_symbols, 'Open Document Symbols')
@@ -601,7 +605,7 @@ require('lazy').setup({
   { -- Autoformat
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
-    cmd = { 'ConformInfo' },
+    cmd = { 'ConformInfo', 'ConformToggle' },
     keys = {
       {
         '<leader>cf',
@@ -610,6 +614,12 @@ require('lazy').setup({
         end,
         mode = '',
         desc = '[f]ormat buffer',
+      },
+      {
+        '<leader>tf',
+        '<CMD>ConformToggle<CR>',
+        mode = '',
+        desc = 'Toggle [f]ormat',
       },
     },
     opts = {
@@ -620,6 +630,8 @@ require('lazy').setup({
         -- languages here or re-enable it for the disabled ones.
         local disable_filetypes = { c = true, cpp = true }
         if disable_filetypes[vim.bo[bufnr].filetype] then
+          return nil
+        elseif vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
           return nil
         else
           return {
@@ -641,6 +653,18 @@ require('lazy').setup({
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
       },
     },
+    config = function(_, opts)
+      require('conform').setup(opts)
+
+      vim.api.nvim_create_user_command('ConformToggle', function()
+        vim.g.disable_autoformat = not vim.g.disable_autoformat
+        if vim.g.disable_autoformat then
+          vim.notify('conform.nvim: autoformat disabled', vim.log.levels.INFO)
+        else
+          vim.notify('conform.nvim: autoformat enabled', vim.log.levels.INFO)
+        end
+      end, { desc = 'Toggle conform autoformat' })
+    end,
   },
 
   { -- Autocompletion
