@@ -11,7 +11,7 @@ return {
     event = 'BufEnter',
     opts = {
       handle = {
-        color = colors.surface0,
+        color = colors.surface2,
       },
       marks = {
         Search = { color = colors.peach },
