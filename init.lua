@@ -200,7 +200,12 @@ vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 -- Keybinds to make splitting windows easier
 vim.keymap.set('n', '<leader>_', '<C-W>s', { desc = 'Split Window Below', remap = true })
 vim.keymap.set('n', '<leader>|', '<C-W>v', { desc = 'Split Window Right', remap = true })
-vim.keymap.set('n', '<leader>wd', '<C-W>c', { desc = 'Delete Window', remap = true })
+vim.keymap.set('n', '<leader>wd', '<C-W>q', { desc = 'Delete Window', remap = true })
+vim.keymap.set('n', '<leader>wD', '<C-W>o', { desc = 'Delete All Other Windows', remap = true })
+vim.keymap.set('n', '<leader>wml', '<C-W>L', { desc = 'Move Window Left', remap = true })
+vim.keymap.set('n', '<leader>wmh', '<C-W>H', { desc = 'Move Window Right', remap = true })
+vim.keymap.set('n', '<leader>wmj', '<C-W>J', { desc = 'Move Window Bottom', remap = true })
+vim.keymap.set('n', '<leader>wmk', '<C-W>K', { desc = 'Move Window Top', remap = true })
 
 -- Resize windows with Ctrl + arrow keys
 vim.keymap.set('n', '<C-Up>', ':resize +2<CR>', { desc = 'Increase window height', silent = true })
@@ -339,6 +344,7 @@ require('lazy').setup({
           { '<leader>t', group = '[t]oggle', icon = { icon = '󰔡', color = 'purple' } },
           { '<leader>u', group = '[u]ser Interface', icon = { icon = '󰙵', color = 'purple' } },
           { '<leader>w', group = '[w]indow', icon = { icon = '󰖯', color = 'purple' } },
+          { '<leader>wm', group = '[m]ove', icon = { icon = '󰖯', color = 'purple' } },
           { '<leader>x', group = 'Trouble', icon = { icon = '󰒡', color = 'purple' } },
         },
       },
@@ -740,14 +746,14 @@ require('lazy').setup({
         documentation = {
           auto_show = true,
           auto_show_delay_ms = 500,
-          draw = function(opts)
-            if opts.item and opts.item.documentation and opts.item.documentation.value then
-              local out = require('pretty_hover.parser').parse(opts.item.documentation.value)
-              opts.item.documentation.value = out:string()
-            end
-
-            opts.default_implementation(opts)
-          end,
+          -- draw = function(opts)
+          --   if opts.item and opts.item.documentation and opts.item.documentation.value then
+          --     local out = require('pretty_hover.parser').parse(opts.item.documentation.value)
+          --     opts.item.documentation.value = out:string()
+          --   end
+          --
+          --   opts.default_implementation(opts)
+          -- end,
         },
       },
 
@@ -1120,6 +1126,7 @@ require('lazy').setup({
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   { import = 'custom.plugins' },
+  { import = 'custom.plugins.ai' },
   { import = 'custom.plugins.editor' },
   { import = 'custom.plugins.lang' },
   { import = 'custom.plugins.lsp' },
