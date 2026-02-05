@@ -486,9 +486,7 @@ require('lazy').setup({
           if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
             vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
 
-            map('<leader>th', function()
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-            end, 'Inlay [h]ints')
+            map('<leader>th', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf }) end, 'Inlay [h]ints')
           end
         end,
       })
@@ -497,9 +495,7 @@ require('lazy').setup({
       vim.api.nvim_create_autocmd('LspAttach', {
         callback = function(args)
           local client = vim.lsp.get_client_by_id(args.data.client_id)
-          if not client then
-            return
-          end
+          if not client then return end
 
           -- disable all LSP semantic highlighting
           -- if client.server_capabilities.semanticTokensProvider then
@@ -568,7 +564,7 @@ require('lazy').setup({
       -- You can press `g?` for help in this menu.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'lua_ls', -- Lua Language server
+        -- 'lua_ls', -- Lua Language server
         'stylua', -- Used to format Lua code
         -- You can add other tools here that you want Mason to install
       })
@@ -616,9 +612,7 @@ require('lazy').setup({
     keys = {
       {
         '<leader>cf',
-        function()
-          require('conform').format { async = true, lsp_format = 'fallback' }
-        end,
+        function() require('conform').format { async = true, lsp_format = 'fallback' } end,
         mode = 'n',
         desc = '[f]ormat buffer',
       },
@@ -760,26 +754,23 @@ require('lazy').setup({
 
       sources = {
         default = { 'lsp', 'path', 'snippets' },
--- <<<<<<< HEAD
--- =======
---         per_filetype = {
---           lua = { inherit_defaults = true, 'lazydev' },
---           -- csproj = { inherit_defaults = true, 'easy-dotnet' },
---         },
---         providers = {
---           ['lazydev'] = {
---             module = 'lazydev.integrations.blink',
---             score_offset = 100,
---             async = true,
---           },
---           -- ['easy-dotnet'] = {
---           --   -- name = 'easy-dotnet',
---           --   module = 'easy-dotnet.completion.blink',
---           --   score_offset = 100,
---           --   async = true,
---           -- },
---         },
--- >>>>>>> 75607ba (chore: added plugins i need, and change treesitter config for main branch.)
+        -- per_filetype = {
+        --   lua = { inherit_defaults = true, 'lazydev' },
+        --   -- csproj = { inherit_defaults = true, 'easy-dotnet' },
+        -- },
+        -- providers = {
+        --   ['lazydev'] = {
+        --     module = 'lazydev.integrations.blink',
+        --     score_offset = 100,
+        --     async = true,
+        --   },
+        --   -- ['easy-dotnet'] = {
+        --   --   -- name = 'easy-dotnet',
+        --   --   module = 'easy-dotnet.completion.blink',
+        --   --   score_offset = 100,
+        --   --   async = true,
+        --   -- },
+        -- },
       },
 
       snippets = { preset = 'luasnip' },
@@ -876,128 +867,16 @@ require('lazy').setup({
 
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
--- <<<<<<< HEAD
+    branch = 'main',
+    build = ':TSUpdate',
+    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+    -- There are additional nvim-treesitter modules that you can use to interact
+    -- with nvim-treesitter. You should go explore a few and see what interests you:
+    --
+    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
+    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
+    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     config = function()
--- =======
---     branch = 'main',
---     build = ':TSUpdate',
---     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
---     -- There are additional nvim-treesitter modules that you can use to interact
---     -- with nvim-treesitter. You should go explore a few and see what interests you:
---     --
---     --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
---     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
---     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
---     config = function()
---       local ts = require('nvim-treesitter')
---
---       -- State tracking for async parser loading
---       local parsers_loaded = {}
---       local parsers_pending = {}
---       local parsers_failed = {}
---
---       local ns = vim.api.nvim_create_namespace('treesitter.async')
---
---       -- Helper to start highlighting and indentation
---       local function start(buf, lang)
---         local ok = pcall(vim.treesitter.start, buf, lang)
---         if ok then
---           vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
---         end
---         return ok
---       end
---
---       -- Install core parsers after lazy.nvim finishes loading all plugins
---       vim.api.nvim_create_autocmd('User', {
---         pattern = 'LazyDone',
---         once = true,
---         callback = function()
---           ts.install({
---             'bash',
---             'diff',
---             'lua',
---             'luadoc',
---             'markdown',
---             'markdown_inline',
---             'query',
---             'vim',
---             'vimdoc',
---           }, {
---             max_jobs = 8,
---           })
---         end,
---       })
---
---       -- Decoration provider for async parser loading
---       vim.api.nvim_set_decoration_provider(ns, {
---         on_start = vim.schedule_wrap(function()
---           if #parsers_pending == 0 then
---             return false
---           end
---           for _, data in ipairs(parsers_pending) do
---             if vim.api.nvim_buf_is_valid(data.buf) then
---               if start(data.buf, data.lang) then
---                 parsers_loaded[data.lang] = true
---               else
---                 parsers_failed[data.lang] = true
---               end
---             end
---           end
---           parsers_pending = {}
---         end),
---       })
---
---       local group = vim.api.nvim_create_augroup('TreesitterSetup', { clear = true })
---
---       local ignore_filetypes = {
---         'checkhealth',
---         'lazy',
---         'mason',
---         'snacks_dashboard',
---         'snacks_notif',
---         'snacks_win',
---       }
---
---       -- Auto-install parsers and enable highlighting on FileType
---       vim.api.nvim_create_autocmd('FileType', {
---         group = group,
---         desc = 'Enable treesitter highlighting and indentation (non-blocking)',
---         callback = function(event)
---           if vim.tbl_contains(ignore_filetypes, event.match) then
---             return
---           end
---
---           local lang = vim.treesitter.language.get_lang(event.match) or event.match
---           local buf = event.buf
---
---           if parsers_failed[lang] then
---             return
---           end
---
---           if parsers_loaded[lang] then
---             -- Parser already loaded, start immediately (fast path)
---             start(buf, lang)
---           else
---             -- Queue for async loading
---             table.insert(parsers_pending, { buf = buf, lang = lang })
---           end
---
---           -- Auto-install missing parsers (async, no-op if already installed)
---           ts.install({ lang })
---         end,
---       })
---     end,
---   },
---   {
---     'nvim-treesitter/nvim-treesitter-context',
---     config = function()
---       require('treesitter-context').setup {
---         max_lines = 3,   -- 最多顯示幾行 context
---         multiline_threshold = 5,
---         mode = 'cursor', -- 依據游標位置決定顯示的節點
---       }
-    -- end,
--- >>>>>>> 75607ba (chore: added plugins i need, and change treesitter config for main branch.)
       local ts = require 'nvim-treesitter'
 
       -- State tracking for async parser loading
@@ -1010,9 +889,7 @@ require('lazy').setup({
       -- Helper to start highlighting and indentation
       local function start(buf, lang)
         local ok = pcall(vim.treesitter.start, buf, lang)
-        if ok then
-          vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-        end
+        if ok then vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()" end
         return ok
       end
 
@@ -1040,9 +917,7 @@ require('lazy').setup({
       -- Decoration provider for async parser loading
       vim.api.nvim_set_decoration_provider(ns, {
         on_start = vim.schedule_wrap(function()
-          if #parsers_pending == 0 then
-            return false
-          end
+          if #parsers_pending == 0 then return false end
           for _, data in ipairs(parsers_pending) do
             if vim.api.nvim_buf_is_valid(data.buf) then
               if start(data.buf, data.lang) then
@@ -1072,16 +947,12 @@ require('lazy').setup({
         group = group,
         desc = 'Enable treesitter highlighting and indentation (non-blocking)',
         callback = function(event)
-          if vim.tbl_contains(ignore_filetypes, event.match) then
-            return
-          end
+          if vim.tbl_contains(ignore_filetypes, event.match) then return end
 
           local lang = vim.treesitter.language.get_lang(event.match) or event.match
           local buf = event.buf
 
-          if parsers_failed[lang] then
-            return
-          end
+          if parsers_failed[lang] then return end
 
           if parsers_loaded[lang] then
             -- Parser already loaded, start immediately (fast path)
