@@ -334,8 +334,9 @@ require('lazy').setup({
         {
           { '<leader>_', desc = 'Split Window Below', icon = { icon = '󰖯', color = 'purple' } },
           { '<leader>|', desc = 'Split Window Right', icon = { icon = '󰖯', color = 'purple' } },
+          { '<leader>a', group = '[a]i', icon = { icon = '', color = 'purple' }, mode = { 'n', 'v' } },
           { '<leader>b', group = '[b]uffer', icon = { icon = '󰓩', color = 'purple' } },
-          { '<leader>c', group = '[c]ode', icon = { icon = '󰅩', color = 'purple' } },
+          { '<leader>c', group = '[c]ode', icon = { icon = '󰅩', color = 'purple' }, mode = { 'n', 'v' } },
           { '<leader>d', group = '[d]atabase', icon = { icon = '󰆼', color = 'purple' } },
           { '<leader>f', group = '[f]ind', icon = { icon = '󰱼', color = 'purple' } },
           { '<leader>g', group = '[g]it', icon = { icon = '', color = 'purple' }, mode = { 'n', 'v' } },
@@ -618,13 +619,13 @@ require('lazy').setup({
         function()
           require('conform').format { async = true, lsp_format = 'fallback' }
         end,
-        mode = '',
+        mode = 'n',
         desc = '[f]ormat buffer',
       },
       {
         '<leader>tf',
         '<CMD>ConformToggle<CR>',
-        mode = '',
+        mode = 'n',
         desc = 'Toggle [f]ormat',
       },
     },

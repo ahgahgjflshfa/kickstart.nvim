@@ -17,13 +17,13 @@ return {
     vim.o.autoread = true
 
     -- Recommended/example keymaps.
-    vim.keymap.set({ 'n', 'x' }, '<C-a>', function()
+    vim.keymap.set({ 'n', 'x' }, '<leader>aA', function()
       require('opencode').ask('@this: ', { submit = true })
-    end, { desc = 'Ask opencode…' })
-    vim.keymap.set({ 'n', 'x' }, '<C-x>', function()
+    end, { desc = '[A]sk opencode…' })
+    vim.keymap.set({ 'n', 'x' }, '<leader>ax', function()
       require('opencode').select()
-    end, { desc = 'Execute opencode action…' })
-    vim.keymap.set({ 'n', 't' }, '<C-.>', function()
+    end, { desc = 'E[x]ecute opencode action…' })
+    vim.keymap.set({ 'n', 't' }, '<leader>aa', function()
       require('opencode').toggle()
     end, { desc = 'Toggle opencode' })
 
@@ -42,7 +42,7 @@ return {
     end, { desc = 'Scroll opencode down' })
 
     -- You may want these if you stick with the opinionated "<C-a>" and "<C-x>" above — otherwise consider "<leader>o…".
-    vim.keymap.set('n', '+', '<C-a>', { desc = 'Increment under cursor', noremap = true })
-    vim.keymap.set('n', '-', '<C-x>', { desc = 'Decrement under cursor', noremap = true })
+    -- vim.keymap.set('n', '+', '<C-a>', { desc = 'Increment under cursor', noremap = true })
+    -- vim.keymap.set('n', '-', '<C-x>', { desc = 'Decrement under cursor', noremap = true })
   end,
 }
