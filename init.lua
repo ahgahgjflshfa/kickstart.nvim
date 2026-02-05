@@ -208,10 +208,10 @@ vim.keymap.set('n', '<leader>wmj', '<C-W>J', { desc = 'Move Window Bottom', rema
 vim.keymap.set('n', '<leader>wmk', '<C-W>K', { desc = 'Move Window Top', remap = true })
 
 -- Resize windows with Ctrl + arrow keys
-vim.keymap.set('n', '<C-Up>', ':resize +2<CR>', { desc = 'Increase window height', silent = true })
-vim.keymap.set('n', '<C-Down>', ':resize -2<CR>', { desc = 'Decrease window height', silent = true })
-vim.keymap.set('n', '<C-Left>', ':vertical resize -2<CR>', { desc = 'Decrease window width', silent = true })
-vim.keymap.set('n', '<C-Right>', ':vertical resize +2<CR>', { desc = 'Increase window width', silent = true })
+vim.keymap.set('n', '<M-k>', ':resize +2<CR>', { desc = 'Increase window height', silent = true })
+vim.keymap.set('n', '<M-j>', ':resize -2<CR>', { desc = 'Decrease window height', silent = true })
+vim.keymap.set('n', '<M-h>', ':vertical resize -2<CR>', { desc = 'Decrease window width', silent = true })
+vim.keymap.set('n', '<M-l>', ':vertical resize +2<CR>', { desc = 'Increase window width', silent = true })
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
