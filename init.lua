@@ -368,6 +368,9 @@ require('lazy').setup({
       -- Mason must be loaded before its dependents so we need to set it up here.
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
       { 'mason-org/mason.nvim', opts = {} },
+      { 'mason-org/mason-lspconfig.nvim', opts = {
+        ensure_installed = {},
+      } },
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
@@ -571,11 +574,11 @@ require('lazy').setup({
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-      for name, server in pairs(servers) do
-        server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-        vim.lsp.config(name, server)
-        vim.lsp.enable(name)
-      end
+      -- for name, server in pairs(servers) do
+      --   server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+      --   vim.lsp.config(name, server)
+      --   vim.lsp.enable(name)
+      -- end
 
       -- Special Lua Config, as recommended by neovim help docs
       vim.lsp.config('lua_ls', {
@@ -602,7 +605,7 @@ require('lazy').setup({
           Lua = {},
         },
       })
-      vim.lsp.enable 'lua_ls'
+      -- vim.lsp.enable 'lua_ls'
     end,
   },
   { -- Autoformat
