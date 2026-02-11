@@ -14,9 +14,7 @@ return {
         desc = 'Markdown Preview',
       },
     },
-    config = function()
-      vim.cmd [[do FileType]]
-    end,
+    config = function() vim.cmd [[do FileType]] end,
   },
   {
     'MeanderingProgrammer/render-markdown.nvim',
@@ -27,13 +25,13 @@ return {
         width = 'block',
         right_pad = 1,
       },
-      heading = {
-        sign = false,
-        icons = {},
-      },
-      checkbox = {
-        enabled = false,
-      },
+      -- heading = {
+      --   sign = false,
+      --   icons = {},
+      -- },
+      -- checkbox = {
+      --   enabled = false,
+      -- },
     },
     config = function(_, opts)
       require('render-markdown').setup(opts)
