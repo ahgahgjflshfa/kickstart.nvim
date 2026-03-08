@@ -6,6 +6,8 @@ return {
   keys = {
     { '<S-h>', '<cmd>BufferLineCyclePrev<cr>', desc = 'Prev Buffer' },
     { '<S-l>', '<cmd>BufferLineCycleNext<cr>', desc = 'Next Buffer' },
+    { '<leader>bp', '<cmd>BufferLineTogglePin<CR>', desc = '[p]in' },
+    { '<leader>bP', '<cmd>BufferLineGroupClose ungrouped<CR>', desc = 'delete un[P]inned' },
   },
   opts = function()
     return {
@@ -24,22 +26,16 @@ return {
 
         custom_filter = function(buf_number, buf_numbers)
           -- Hide help buffers
-          if vim.bo[buf_number].filetype == 'help' then
-            return false
-          end
+          if vim.bo[buf_number].filetype == 'help' then return false end
 
           -- Hide specific filetypes like defx, NvimTree
           local hide_types = { 'defx', 'snacks_dashboard', 'qf' }
           for _, ft in ipairs(hide_types) do
-            if vim.bo[buf_number].filetype == ft then
-              return false
-            end
+            if vim.bo[buf_number].filetype == ft then return false end
           end
 
           -- Hide by buffer name (e.g., quickfix)
-          if vim.fn.bufname(buf_number):match 'quickfix' then
-            return false
-          end
+          if vim.fn.bufname(buf_number):match 'quickfix' then return false end
           return true
         end,
       },
