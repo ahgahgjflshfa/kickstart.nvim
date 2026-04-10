@@ -176,6 +176,10 @@ require('vim._core.ui2').enable {
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
+-- add undo tree feature from 0.12.0
+vim.cmd 'packadd nvim.undotree'
+vim.keymap.set('n', '<leader>u', require('undotree').open, { desc = '[u]ndotree' })
+
 vim.keymap.set('n', '<Enter>', 'o<Esc>')
 vim.keymap.set('n', '<S-Enter>', 'O<Esc>')
 vim.keymap.set('x', '>', '>gv', { noremap = true, silent = true })
@@ -212,7 +216,7 @@ vim.keymap.set('n', '<leader>wmh', '<C-W>H', { desc = 'Move Window Right', remap
 vim.keymap.set('n', '<leader>wmj', '<C-W>J', { desc = 'Move Window Bottom', remap = true })
 vim.keymap.set('n', '<leader>wmk', '<C-W>K', { desc = 'Move Window Top', remap = true })
 
--- Resize windows with Ctrl + arrow keys
+-- Resize windows with Option + arrow keys
 vim.keymap.set('n', '<M-k>', ':resize +2<CR>', { desc = 'Increase window height', silent = true })
 vim.keymap.set('n', '<M-j>', ':resize -2<CR>', { desc = 'Decrease window height', silent = true })
 vim.keymap.set('n', '<M-h>', ':vertical resize -2<CR>', { desc = 'Decrease window width', silent = true })
@@ -348,7 +352,7 @@ require('lazy').setup({
           { '<leader>gh', group = '[h]unk', icon = { icon = '󰊢', color = 'purple' }, mode = { 'n', 'v' } },
           { '<leader>s', group = '[s]earch', icon = { icon = '󰍉', color = 'purple' } },
           { '<leader>t', group = '[t]oggle', icon = { icon = '󰔡', color = 'purple' } },
-          { '<leader>u', group = '[u]ser Interface', icon = { icon = '󰙵', color = 'purple' } },
+          -- { '<leader>u', group = '[u]ser Interface', icon = { icon = '󰙵', color = 'purple' } },
           { '<leader>w', group = '[w]indow', icon = { icon = '󰖯', color = 'purple' } },
           { '<leader>wm', group = '[m]ove', icon = { icon = '󰖯', color = 'purple' } },
           { '<leader>x', group = 'Trouble', icon = { icon = '󰒡', color = 'purple' } },
@@ -613,6 +617,7 @@ require('lazy').setup({
       -- vim.lsp.enable 'lua_ls'
     end,
   },
+
   { -- Autoformat
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
