@@ -2,11 +2,6 @@ local colors = require('catppuccin.palettes').get_palette 'macchiato'
 
 return {
   {
-    'karb94/neoscroll.nvim',
-    event = 'BufEnter',
-    opts = {},
-  },
-  {
     'petertriho/nvim-scrollbar',
     event = 'BufEnter',
     opts = {
